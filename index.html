@@ -1,105 +1,22 @@
 <!DOCTYPE html>
-<html>
-<head>
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<title>PLATEAU RACE - Car Game</title>
-<meta name="description" content="Play Plateau Race - A free online car racing game by Daniel from Plateau, Nigeria. Dodge traffic, beat your high score. No download, play now!">
-<style>
-  body{margin:0;background:#222;color:white;font-family:Arial;text-align:center;overflow:hidden;touch-action:none}
-  canvas{background:#444;display:block;margin:0 auto;border:4px solid #667eea;max-width:100%}
-  #ui{padding:10px}
-  #controls{display:flex;justify-content:center;gap:30px;margin-top:10px}
-  .btn{width:80px;height:80px;background:#667eea;border:none;border-radius:50%;color:white;font-size:30px;font-weight:bold}
-  .btn:active{background:#25D366;transform:scale(0.9)}
-  #score{font-size:20px;font-weight:bold}
-</style>
-</head>
-<body>
-<div id="ui"><h2>🏎️ PLATEAU RACE</h2><div id="score">Score: 0 | Speed: 0</div></div>
-<canvas id="game" width="400" height="600"></canvas>
-<div id="controls"><button class="btn" id="left">◀</button><button class="btn" id="right">▶</button></div>
-<p style="font-size:12px;">Tap ◀ ▶ to steer! Avoid red cars!</p>
+<html><head><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PLATEAU RACE</title>
+<style>body{margin:0;background:#111;color:#fff;text-align:center;font-family:sans-serif}canvas{background:#333;border:3px solid blue}</style>
+</head><body>
+<h2>🏎️ PLATEAU RACE</h2>
+<p id="s">Score: 0</p>
+<canvas id="c" width="360" height="500"></canvas><br>
+<button style="width:80px;height:60px" onmousedown="L=true" onmouseup="L=false" ontouchstart="L=true" ontouchend="L=false">◀</button>
+<button style="width:80px;height:60px" onmousedown="R=true" onmouseup="R=false" ontouchstart="R=true" ontouchend="R=false">▶</button>
 <script>
-const canvas=document.getElementById('game');const ctx=canvas.getContext('2d');
-let player={x:170,y:500,w:60,h:100,speed:0};let enemies=[];let score=0,gameSpeed=5;
-let keys={left:false,right:false};let gameOver=false;
-function drawRoad(){
-  ctx.fillStyle='#333';ctx.fillRect(0,0,400,600);
-  ctx.fillStyle='white';
-  for(let i=0;i<600;i+=40){ctx.fillRect(195,i+(Date.now()/20)%40,10,20)}
-  ctx.fillStyle='#222';ctx.fillRect(0,0,20,600);ctx.fillRect(380,0,20,600);
-}
-function drawCar(x,y,w,h,color){
-  ctx.fillStyle=color;ctx.fillRect(x,y,w,h);
-  ctx.fillStyle='#111';ctx.fillRect(x+5,y+15,w-10,20);ctx.fillRect(x+5,y+h-30,w-10,20);
-  ctx.fillStyle='yellow';ctx.fillRect(x+10,y+h-10,10,5);ctx.fillRect(x+w-20,y+h-10,10,5);
-}
-function update(){
-  if(gameOver)return;
-  if(keys.left&&player.x>25)player.x-=7;
-  if(keys.right&&player.x<315)player.x+=7;
-  if(Math.random()<0.03){enemies.push({x:25+Math.random()*290,y:-120,w:60,h:100})}
-  enemies.forEach((e,i)=>{
-    e.y+=gameSpeed;
-    if(e.y>600){enemies.splice(i,1);score+=10;gameSpeed+=0.1}
-    if(e.x<player.x+player.w&&e.x+e.w>player.x&&e.y<player.y+player.h&&e.y+e.h>player.y){
-      gameOver=true;alert('CRASH! Score: '+score);location.reload();
-    }
-  });
-  document.getElementById('score').textContent=`Score: ${score} | Speed: ${Math.floor(gameSpeed*10)}km/h`;
-}
-function render(){
-  drawRoad();drawCar(player.x,player.y,player.w,player.h,'#25D366');
- <!DOCTYPE html>
-<html>
-<head>
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<title>PLATEAU RACE - Car Game</title>
-<meta name="description" content="Play Plateau Race - A free online car racing game by Daniel from Plateau, Nigeria. Dodge traffic, beat your high score. No download, play now!">
-<style>
-  body{margin:0;background:#222;color:white;font-family:Arial;text-align:center;overflow:hidden;touch-action:none}
-  canvas{background:#444;display:block;margin:0 auto;border:4px solid #667eea;max-width:100%}
-  #ui{padding:10px}
-  #controls{display:flex;justify-content:center;gap:30px;margin-top:10px}
-  .btn{width:80px;height:80px;background:#667eea;border:none;border-radius:50%;color:white;font-size:30px;font-weight:bold}
-  .btn:active{background:#25D366;transform:scale(0.9)}
-  #score{font-size:20px;font-weight:bold}
-</style>
-</head>
-<body>
-<div id="ui"><h2>🏎️ PLATEAU RACE</h2><div id="score">Score: 0 | Speed: 0</div></div>
-<canvas id="game" width="400" height="600"></canvas>
-<div id="controls"><button class="btn" id="left">◀</button><button class="btn" id="right">▶</button></div>
-<p style="font-size:12px;">Tap ◀ ▶ to steer! Avoid red cars!</p>
-<script>
-const canvas=document.getElementById('game');const ctx=canvas.getContext('2d');
-let player={x:170,y:500,w:60,h:100,speed:0};let enemies=[];let score=0,gameSpeed=5;
-let keys={left:false,right:false};let gameOver=false;
-function drawRoad(){
-  ctx.fillStyle='#333';ctx.fillRect(0,0,400,600);
-  ctx.fillStyle='white';
-  for(let i=0;i<600;i+=40){ctx.fillRect(195,i+(Date.now()/20)%40,10,20)}
-  ctx.fillStyle='#222';ctx.fillRect(0,0,20,600);ctx.fillRect(380,0,20,600);
-}
-function drawCar(x,y,w,h,color){
-  ctx.fillStyle=color;ctx.fillRect(x,y,w,h);
-  ctx.fillStyle='#111';ctx.fillRect(x+5,y+15,w-10,20);ctx.fillRect(x+5,y+h-30,w-10,20);
-  ctx.fillStyle='yellow';ctx.fillRect(x+10,y+h-10,10,5);ctx.fillRect(x+w-20,y+h-10,10,5);
-}
-function update(){
-  if(gameOver)return;
-  if(keys.left&&player.x>25)player.x-=7;
-  if(keys.right&&player.x<315)player.x+=7;
-  if(Math.random()<0.03){enemies.push({x:25+Math.random()*290,y:-120,w:60,h:100})}
-  enemies.forEach((e,i)=>{
-    e.y+=gameSpeed;
-    if(e.y>600){enemies.splice(i,1);score+=10;gameSpeed+=0.1}
-    if(e.x<player.x+player.w&&e.x+e.w>player.x&&e.y<player.y+player.h&&e.y+e.h>player.y){
-      gameOver=true;alert('CRASH! Score: '+score);location.reload();
-    }
-  });
-  document.getElementById('score').textContent=`Score: ${score} | Speed: ${Math.floor(gameSpeed*10)}km/h`;
-}
-function render(){
-  drawRoad();drawCar(player.x,player.y,player.w,player.h,'#25D366');
- 
+C=document.getElementById('c');X=C.getContext('2d');px=150;py=400;en=[];sc=0;sp=3;L=false;R=false;
+function loop(){
+ X.clearRect(0,0,360,500);X.fillStyle='#444';X.fillRect(0,0,360,500);
+ if(L&&px>0)px-=5;if(R&&px<310)px+=5;
+ if(Math.random()<0.03)en.push({x:Math.random()*310,y:-50});
+ en.forEach((o,i)=>{o.y+=sp;if(o.y>500){en.splice(i,1);sc++;sp+=0.02} if(o.x<px+50&&o.x+50>px&&o.y<py+80&&o.y+80>py){alert('Game Over! Score '+sc);location.reload()}});
+ X.fillStyle='lime';X.fillRect(px,py,50,80);
+ X.fillStyle='red';en.forEach(o=>X.fillRect(o.x,o.y,50,80));
+ document.getElementById('s').innerText='Score: '+sc;requestAnimationFrame(loop);
+}loop();
+</script></body></html>
