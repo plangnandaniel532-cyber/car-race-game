@@ -1,22 +1,44 @@
 <!DOCTYPE html>
-<html><head><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>PLATEAU RACE</title>
-<style>body{margin:0;background:#111;color:#fff;text-align:center;font-family:sans-serif}canvas{background:#333;border:3px solid blue}</style>
-</head><body>
-<h2>🏎️ PLATEAU RACE</h2>
-<p id="s">Score: 0</p>
-<canvas id="c" width="360" height="500"></canvas><br>
-<button style="width:80px;height:60px" onmousedown="L=true" onmouseup="L=false" ontouchstart="L=true" ontouchend="L=false">◀</button>
-<button style="width:80px;height:60px" onmousedown="R=true" onmouseup="R=false" ontouchstart="R=true" ontouchend="R=false">▶</button>
+<html><head><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>PLATEAU RACE PRO</title>
+<style>
+body{margin:0;background:#0f0f0f;color:white;font-family:Arial;text-align:center;overflow:hidden}
+h2{margin:8px;color:#00ff88;text-shadow:0 0 10px #00ff88}
+canvas{background:linear-gradient(#333,#222);border:4px solid #00ff88;border-radius:10px;box-shadow:0 0 20px #00ff8844}
+#hud{display:flex;justify-content:space-around;font-weight:bold;padding:5px;background:#1a1a1a}
+.btn{width:85px;height:85px;background:#222;border:3px solid #00ff88;border-radius:50%;color:#00ff88;font-size:30px;margin:8px}
+.btn:active{background:#00ff88;color:#000;transform:scale(0.9)}
+</style></head><body>
+<h2>🏎️ PLATEAU RACE PRO</h2>
+<div id="hud"><span id="sc">Score: 0</span><span id="hs">Best: 0</span><span id="sp">Speed: 0</span></div>
+<canvas id="c" width="380" height="550"></canvas><br>
+<button class="btn" id="lb">◀</button><button class="btn" id="rb">▶</button>
+<p style="font-size:11px;color:#888">By Daniel Plangnan | Plateau, Nigeria 🇳🇬</p>
 <script>
-C=document.getElementById('c');X=C.getContext('2d');px=150;py=400;en=[];sc=0;sp=3;L=false;R=false;
+C=document.getElementById('c');X=C.getContext('2d');
+px=165;py=450;en=[];sc=0;sp=4;L=false;R=false;best=localStorage.getItem('best')||0;
+document.getElementById('hs').innerText='Best: '+best;
+function drawCar(x,y,color,isPlayer){
+ X.fillStyle=color;X.fillRect(x+5,y,40,70);X.fillStyle='#111';X.fillRect(x+8,y+10,34,15);X.fillRect(x+8,y+50,34,12);
+ X.fillStyle='yellow';X.fillRect(x+8,y+65,8,5);X.fillRect(x+34,y+65,8,5);
+ if(isPlayer){X.fillStyle='#00ff88';X.fillRect(x,y+70,40,3)}
+}
 function loop(){
- X.clearRect(0,0,360,500);X.fillStyle='#444';X.fillRect(0,0,360,500);
- if(L&&px>0)px-=5;if(R&&px<310)px+=5;
- if(Math.random()<0.03)en.push({x:Math.random()*310,y:-50});
- en.forEach((o,i)=>{o.y+=sp;if(o.y>500){en.splice(i,1);sc++;sp+=0.02} if(o.x<px+50&&o.x+50>px&&o.y<py+80&&o.y+80>py){alert('Game Over! Score '+sc);location.reload()}});
- X.fillStyle='lime';X.fillRect(px,py,50,80);
- X.fillStyle='red';en.forEach(o=>X.fillRect(o.x,o.y,50,80));
- document.getElementById('s').innerText='Score: '+sc;requestAnimationFrame(loop);
+ X.clearRect(0,0,380,550);
+ X.fillStyle='#2a2a2a';X.fillRect(0,0,380,550);
+ X.fillStyle='white';for(let i=0;i<550;i+=50){X.fillRect(185,i+Date.now()/10%50,10,25)}
+ X.fillStyle='#000';X.fillRect(0,0,15,550);X.fillRect(365,0,15,550);
+ if(L&&px>20)px-=6;if(R&&px<310)px+=6;
+ if(Math.random()<0.025)en.push({x:20+Math.random()*300,y:-80});
+ en.forEach((o,i)=>{o.y+=sp;if(o.y>600){en.splice(i,1);sc+=5;sp+=0.04}});
+ for(let o of en){if(o.x<px+50&&o.x+40>px&&o.y<py+70&&o.y+70>py){if(sc>best){best=sc;localStorage.setItem('best',best)}alert('💥 CRASH! Score: '+sc+' | Best: '+best);location.reload()}}
+ drawCar(px,py,'#00ff88',true);en.forEach(o=>drawCar(o.x,o.y,'#ff3333',false));
+ document.getElementById('sc').innerText='Score: '+sc;
+ document.getElementById('sp').innerText='Speed: '+Math.floor(sp*15)+'km/h';
+ requestAnimationFrame(loop);
 }loop();
+function bind(b,flag){b.addEventListener('touchstart',e=>{e.preventDefault();flag?L=true:R=true});b.addEventListener('touchend',e=>{e.preventDefault();flag?L=false:R=false});b.addEventListener('mousedown',()=>flag?L=true:R=true);b.addEventListener('mouseup',()=>flag?L=false:R=false)}
+bind(lb,true);bind(rb,false);
+addEventListener('keydown',e=>{if(e.key=='ArrowLeft')L=true;if(e.key=='ArrowRight')R=true});
+addEventListener('keyup',e=>{if(e.key=='ArrowLeft')L=false;if(e.key=='ArrowRight')R=false});
 </script></body></html>
